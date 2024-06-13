@@ -45,17 +45,12 @@ The Image Recommender Application is a web-based tool designed to provide person
     source venv/bin/activate  # On Windows use `venv\Scripts\activate`
     ```
 
-3. **Install dependencies**:
-    ```sh
-    pip install -r requirements.txt
-    ```
-
-4. **Run the application**:
+3. **Run the application**:
     ```sh
     python app.py
     ```
 
-5. **Open the application**:
+4. **Open the application**:
     Open your web browser and go to `http://127.0.0.1:5000`.
 
 ### Note on Virtual Environment
