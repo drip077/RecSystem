@@ -58,20 +58,17 @@ The Image Recommender Application is a web-based tool designed to provide person
 5. **Open the application**:
     Open your web browser and go to `http://127.0.0.1:5000`.
 
+### Note on Virtual Environment
+
+The project was developed using a virtual environment to manage dependencies. However, due to the large number of files, the virtual environment directory (`venv`) is not included in the repository as GitHub restricts the upload of too many files. You can recreate the virtual environment using the instructions above.
+
 ## Dependencies
 
 - Flask
 - Requests (if fetching images from an API)
 
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request if you would like to contribute to this project.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
 ## Acknowledgments
 
 - LoremFlickr for providing the images.
+
 
