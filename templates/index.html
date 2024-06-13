@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Recommendation System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #343a40;
+            color: white;
+        }
+        .image-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .image-item {
+            text-align: center;
+        }
+        img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+        }
+        .selected {
+            background-color: red !important;
+            color: white !important;
+        }
+        .btn-refresh {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Image Recommendation System</h1>
+        <div class="image-container" id="image-container">
+            {% for image, tag in images_with_tags %}
+            <div class="image-item">
+                <img src="{{ image }}" alt="Image">
+                <div>{{ tag }}</div>
+                <div>
+                    <button class="btn btn-primary" onclick="sendFeedback({{ loop.index0 }}, 1, '{{ tag }}')">Like</button>
+                    <button class="btn btn-secondary" onclick="sendFeedback({{ loop.index0 }}, 0, '{{ tag }}')">Unlike</button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <button class="btn btn-refresh btn-primary" onclick="refreshFeed()">Refresh</button>
+    </div>
+    <script>
+        function sendFeedback(chosenArm, reward, tag) {
+            fetch('/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ chosen_arm: chosenArm, reward: reward, tag: tag }),
+            }).then(response => {
+                if (response.ok) {
+                    updateButtonStyles(chosenArm, reward);
+                }
+            });
+        }
+
+        function updateButtonStyles(chosenArm, reward) {
+            const imageItem = document.querySelectorAll('.image-item')[chosenArm];
+            const likeButton = imageItem.querySelector('button:nth-child(1)');
+            const unlikeButton = imageItem.querySelector('button:nth-child(2)');
+
+            if (reward === 1) {
+                likeButton.classList.add('selected');
+                unlikeButton.classList.remove('selected');
+            } else {
+                unlikeButton.classList.add('selected');
+                likeButton.classList.remove('selected');
+            }
+        }
+
+        function refreshFeed() {
+            fetch('/refresh', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }).then(response => response.json())
+              .then(data => {
+                  const container = document.getElementById('image-container');
+                  container.innerHTML = '';
+                  data.images.forEach((image, index) => {
+                      const imageItem = document.createElement('div');
+                      imageItem.className = 'image-item';
+                      imageItem.innerHTML = `
+                          <img src="${image}" alt="Image">
+                          <div>${data.tags[index]}</div>
+                          <div>
+                              <button class="btn btn-primary" onclick="sendFeedback(${index}, 1, '${data.tags[index]}')">Like</button>
+                              <button class="btn btn-secondary" onclick="sendFeedback(${index}, 0, '${data.tags[index]}')">Unlike</button>
+                          </div>
+                      `;
+                      container.appendChild(imageItem);
+                  });
+              });
+        }
+    </script>
+</body>
+</html>
