@@ -62,6 +62,10 @@ The project was developed using a virtual environment to manage dependencies. Ho
 - Flask
 - Requests (if fetching images from an API)
 
+## Note on Image Source
+
+LoremFlickr often has pictures that do not look anything like their tag, but the algorithm does not look at the image itself; it only considers the tag associated with the image. The recommendations are based purely on the tags and the user's feedback.
+
 ## Acknowledgments
 
 - LoremFlickr for providing the images.
